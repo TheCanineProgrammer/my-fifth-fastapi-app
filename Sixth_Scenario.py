@@ -85,7 +85,9 @@ async def assistant(request: ChatRequest):
                 temperature=0.0
             )
             answer = response.choices[0].message.content.strip()
-            return {"message": answer, "base_random_keys": None, "member_random_keys": None}
+            response = {"message": answer, "base_random_keys": None, "member_random_keys": None}
+            logging.info(f"Response: {response}")
+            return response
         except Exception as e:
             logging.error(f"Image understanding failed: {e}")
             return {"message": None, "base_random_keys": None, "member_random_keys": None}
@@ -190,13 +192,18 @@ async def assistant(request: ChatRequest):
                     temperature=0.0
                 )
                 feature_answer = response.choices[0].message.content.strip()
-                return {
+                response = {
                     "message": feature_answer,
                     "base_random_keys": None,
                     "member_random_keys": None
                 }
+
+                logging.info(f"Response: {response}")
+
+                return response
             except Exception as e:
                 logging.error(f"Feature extraction failed: {e}")
+                
                 return {
                     "message": None,
                     "base_random_keys": None,
@@ -238,11 +245,15 @@ async def assistant(request: ChatRequest):
                 logging.error(f"Vendor info extraction failed: {e}")
                 numeric_answer = None
 
-            return {
+            response = {
                     "message": numeric_answer,
                     "base_random_keys": None,
                     "member_random_keys": None
                 }
+            
+            logging.info(f"Response: {response}")
+
+            return response
         else:
             response = {
                 "message": None,
